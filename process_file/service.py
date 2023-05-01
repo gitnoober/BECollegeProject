@@ -1,6 +1,7 @@
 #Packages related to general operating system & warnings
 import pickle
 import json
+import requests
 import numpy as np
 import pandas as pd
 from pandas import Series, DataFrame
@@ -22,7 +23,11 @@ from process_file.models import MiscData
 from process_file.serializers import MiscDataSerializer
 class ProcessFileService:
     
-    def process_file(self, file, n_rows):
+    def process_file(self, file_url, n_rows):
+        r = requests.get(file_url, allow_redirects=True)
+        file = 'op.csv'
+        with open(file, 'wb') as f:
+            f.write(r.content)
         data = pd.read_csv(file, nrows=n_rows)
         total_transactions = len(data)
         sc = StandardScaler()

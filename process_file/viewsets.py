@@ -30,11 +30,10 @@ class ProcessFileViewSet(viewsets.ModelViewSet):
         
     def create(self, request, *args, **kwargs):
         payload = request.data
-        file_uploaded = payload.get('file')
+        file_url = payload.get('file_url')
         n_rows = int(payload.get('n_rows', 1000))
-        content_type = file_uploaded.content_type
-        s_data = self.service_obj.process_file(file_uploaded, n_rows)
-        response = "POST API and you have uploaded a {} file".format(content_type)
+        s_data = self.service_obj.process_file(file_url, n_rows)
+        response = "POST API and you have uploaded a {} file".format(file_url)
         res = {
             "msg": response,
             "data": s_data
