@@ -54,15 +54,16 @@ class ProcessFileViewSet(viewsets.ModelViewSet):
             response['msg'] = msg
             status_code = 400
         else:
-            qs = MiscData.objects.all()
+            qs = MiscData.objects.filter(parent_id=pk)
             if is_fraud:
-                qs = qs.filter(parent_id=pk, props__is_fraud__icontains='1')
+                qs = qs.filter(props__is_fraud__icontains='1')
             if cc_num:
-                qs = qs.filter(parent_id=pk, props__cc_num__icontains=cc_num)
+                qs = qs.filter(props__cc_num__icontains=cc_num)
             if first:
-                qs = qs.filter(parent_id=pk, props__first__icontains=first)
+                qs = qs.filter(props__first__icontains=first)
             if last:
-                qs = qs.filter(parent_id=pk, props__last__icontains=last)
+                qs = qs.filter(props__last__icontains=last)
+            qs = qs[:5000]
             serialized_data = MiscDataSerializer(qs, many=True).data
             response['msg'] = MiscDataConstants.FETCHED_MSG
             response['data'] = serialized_data
