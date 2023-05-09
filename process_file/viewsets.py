@@ -47,6 +47,9 @@ class ProcessFileViewSet(viewsets.ModelViewSet):
         cc_num = data.get('cc_num')
         first = data.get('first')
         last = data.get('last')
+        gender = data.get('gender')
+        city = data.get('city')
+        job = data.get('job')
         response = {}
         status_code = 200
         if not pk:
@@ -63,6 +66,12 @@ class ProcessFileViewSet(viewsets.ModelViewSet):
                 qs = qs.filter(props__first__icontains=first)
             if last:
                 qs = qs.filter(props__last__icontains=last)
+            if gender:
+                qs = qs.filter(props__gender__icontains=gender)
+            if city:
+                qs = qs.filter(props__city__icontains=city)
+            if job:
+                qs = qs.filter(props__job__icontains=job)
             qs = qs[:5000]
             serialized_data = MiscDataSerializer(qs, many=True).data
             response['msg'] = MiscDataConstants.FETCHED_MSG
